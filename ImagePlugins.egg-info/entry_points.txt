@@ -1,0 +1,5 @@
+
+[cms.plugin]
+jpg_plugin=image_plugin:make_jpg_image_plugin
+png_plugin=image_plugin:make_png_image_plugin
+
