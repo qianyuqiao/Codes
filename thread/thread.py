@@ -51,9 +51,12 @@ def with_join_set():
     for td  in threads:
         td.setDaemon(True)
         td.start()
+    
+    for td in threads:
+
         td.join()
 
-    print 'all done!'
+    print 'happy new year! all done!'
 
 def with_join_notset():
 
@@ -66,8 +69,9 @@ def with_join_notset():
     for td  in threads:
 
         td.start()
+    for td in threads:
+        
         td.join()
-
 
     print 'all done!'
 
@@ -79,7 +83,7 @@ def main():
     #print '\nset daemon and join:'
     #with_join_set()
     print '\nnot set daemon and join:'
-    with_join_notset()
+    with_join_set()
 
 if __name__ == '__main__':
     main()
