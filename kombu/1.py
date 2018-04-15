@@ -23,6 +23,8 @@ def main():
     
     with Connection('amqp://guest:767918@localhost:5672//') as conn:
         print 'connection succeeded!'
+
+        #get the communication channel 
         channel1 = conn.channel()
         _exchange =  uni_exchange
 
