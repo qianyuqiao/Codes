@@ -1,0 +1,57 @@
+#/usr/bin/python
+from kombu import Queue,Exchange
+from kombu.messaging import Consumer
+from kombu.connection import Connection
+import  socket
+import sys
+from eventlet import greenthread
+from time import sleep
+
+
+def process_data(body,msg):
+    print str(msg.payload)
+    msg.ack()
+
+
+connection=Connection('amqp://guest:767918@localhost:5672//')
+channel=connection.channel()
+
+
+def main():
+
+
+    def _consume():
+        _exchange = Exchange('media1',type='fanout',channel=channel,durable=False,auto_delete=True)
+        video_queue = Queue('video',exchange=_exchange,routing_key='video',channel=channel)
+        consumer=Consumer(channel,queues=[video_queue],callbacks=[process_data])
+        consumer.consume()
+    
+        while True:
+            try:
+                connection.drain_events()
+            except socket.timeout:
+                break
+        
+        #actually ,it cancelled the connection 
+        consumer.cancel()
+    
+    def _error_callback(func):
+        
+        def _inner(*args,**kwargs):    
+            
+            try:
+                func(*args,**kwargs)
+            
+            except Exception as exc:
+                if isinstance(exc,socket.timeout):
+                    sys.out.write('socket timeout occured in exec ') 
+        
+        return _inner
+
+    
+    greenthread.spawn(_error_callback,_consume)
+    sleep(10)
+    print 'main thread finished!'
+
+if __name__ == '__main__':
+    main()
