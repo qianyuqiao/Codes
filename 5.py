@@ -1,25 +1,10 @@
-class A(object):
-    def __init__(self,a,b):
-        self.a=a
-        self.b=b
-
-class Mylist(list):
-    
-    def __contains__(self,obj):
-        for i in self:
-            if isinstance(obj,i.__class__):
-                if i.a== obj.a and  i.b == obj.b:
-                    return True
-            
-        return False
-
-
-mylist= Mylist()
-mylist.append(A('2','2'))
-a1=A('1','2')
-if a1 in mylist:
-    print 'yes'
+import re
+HEX_ELEM =  '[0-9a-fA-F]'
+UUID_PATTERN = '-'.join([HEX_ELEM + '{8}',HEX_ELEM + '{4}'])
+print UUID_PATTERN
+s = '12345678-asfg'
+match = re.match(UUID_PATTERN, s)
+if match:
+    print match.group(1)
 else:
-    print 'No'
-
-
+    print 'No matched'
