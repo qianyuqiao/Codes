@@ -16,7 +16,7 @@ def test1():
     for func in (p1, p2):
         eventlet.spawn(func)
     obj, cmd = create_process(["echo", "1"], std_out=None)
-    obj.communicate() #阻塞直到子进程完成，这时候协程可以开始执行了
+    obj.communicate() #阻塞直到子进程结束，这时候协程可以开始执行了
     print "end"
 
 
